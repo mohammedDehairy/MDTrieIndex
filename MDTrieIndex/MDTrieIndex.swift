@@ -24,7 +24,17 @@ class MDTrieIndex: NSObject {
         if trainList.count == 0{
             return
         }
-        let sortedTrainList = trainList.sorted()
+        
+        // filter out empty strings
+        var sortedTrainList = [String]()
+        for str in trainList{
+            if str.characters.count > 0{
+                sortedTrainList.append(str)
+            }
+        }
+        // sort the training list
+        sortedTrainList = sortedTrainList.sorted()
+        
         var tempList = [String]()
         var tempChar : Character = sortedTrainList[0].characters[sortedTrainList[0].startIndex]
         for str in sortedTrainList{
@@ -37,7 +47,7 @@ class MDTrieIndex: NSObject {
             }
             
             let str = str.substring(from: str.index(after: str.startIndex))
-            if str.characters.count != 0{
+            if str.characters.count != 0 {
                 tempList.append(str)
             }
         }
