@@ -40,7 +40,11 @@ class MDTrieIndex: NSObject {
         for str in sortedTrainList{
             let currentChar = str.characters[str.startIndex]
             if currentChar != tempChar{
-                self.trie[tempChar] = MDTrieIndex(trainList: tempList)
+                if let subTrie = self.trie[tempChar] {
+                    subTrie.train(trainList: tempList)
+                }else {
+                    self.trie[tempChar] = MDTrieIndex(trainList: tempList)
+                }
                 tempList = []
                 tempChar = currentChar
             }
@@ -51,8 +55,11 @@ class MDTrieIndex: NSObject {
             }
         }
         
-        let subTrie = MDTrieIndex(trainList: tempList)
-        self.trie[tempChar] = subTrie
+        if let subTrie = self.trie[tempChar] {
+            subTrie.train(trainList: tempList)
+        }else {
+            self.trie[tempChar] = MDTrieIndex(trainList: tempList)
+        }
     }
     
     public func printTrie(indentation: Int)->String{

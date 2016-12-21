@@ -28,8 +28,6 @@ class MDTrieIndexTests: XCTestCase {
             let trieIndex = MDTrieIndex()
             trieIndex.train(trainList: trainingList)
         }
-        
-        
     }
     
     func testPerformanceExample() {
