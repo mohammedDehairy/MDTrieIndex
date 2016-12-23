@@ -30,6 +30,44 @@ class MDTrieIndexTests: XCTestCase {
         }
     }
     
+    func testFindAllStrings(){
+        let trainingList = ["I am mohamed","I am khaled","me Inas"]
+        
+        let trieIndex = MDTrieIndex()
+        trieIndex.train(trainList: trainingList)
+        
+        
+        // Test with no prefix
+        let allStrings = trieIndex.findAllStrings(withPrefix: "")
+        
+        var nonEmptyTrainingList = [String]()
+        
+        for str in trainingList{
+            if str != ""{
+                nonEmptyTrainingList.append(str)
+            }
+        }
+        
+        for (str1,str2) in zip(nonEmptyTrainingList.sorted(), allStrings.sorted()){
+            XCTAssertTrue(str1 == str2)
+        }
+        
+        
+        // Test with prefix "me"
+        
+        let allStrings1 = trieIndex.findAllStrings(withPrefix: "me")
+        
+        XCTAssertTrue(allStrings1.count == 1 && allStrings1.contains("me Inas"))
+        
+        
+        // Test with prefix "I am"
+        
+        let allStrings2 = trieIndex.findAllStrings(withPrefix: "I am")
+        
+        XCTAssertTrue(allStrings2.count == 2 && allStrings2.contains("I am mohamed") && allStrings2.contains("I am khaled"))
+
+    }
+    
     func testPerformanceExample() {
         // This is an example of a performance test case.
         self.measure {

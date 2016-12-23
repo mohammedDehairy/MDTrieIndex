@@ -20,6 +20,10 @@ class MDTrieIndex: NSObject {
         super.init()
     }
     
+    /**
+        Train the trie with a list of strings (index them), multiple calls to train() with the same list will consum processing power but the trie will end up being the same, multiple calls to train() with different lists of strings will result in the new strings being indexed and added to the trie and old strings will be preserved.
+        - parameter trainList : Array ot strings to be indexed.
+    */
     public func train(trainList : [String]){
         if trainList.count == 0{
             return
@@ -60,6 +64,49 @@ class MDTrieIndex: NSObject {
         }else {
             self.trie[tempChar] = MDTrieIndex(trainList: tempList)
         }
+    }
+    
+    /**
+        Finds all strings that starts with the specified prefix
+     
+        - parameter prefix : The prefix to find all strings that starts with it, pass an empty string or nil to get all possible strings in the trie.
+        - returns : A string array containing all possible strings that starts with the specified prefix, or all possible strings indexed in the trie, in case the passed prefix is nil or empty string
+     */
+    public func findAllStrings(withPrefix prefix : String?)->[String]{
+        
+        var result = [String]()
+        
+        if let prefixStr = prefix, prefixStr != "" {
+            
+            let firstCharacter = prefixStr.characters[prefixStr.startIndex]
+            
+            let subTrie = trie[firstCharacter]
+            
+            let strings = subTrie?.findAllStrings(withPrefix: String(prefixStr.characters.dropFirst()))
+            
+            
+            if let subStrings = strings{
+                for str in subStrings{
+                    result.append("\(firstCharacter)\(str)")
+                }
+            }
+            
+            return result
+        }else{
+            for (char,subTrie) in trie{
+                let substrings = subTrie.findAllStrings(withPrefix: nil)
+                
+                if substrings.count > 0{
+                    for str in substrings{
+                        result.append("\(char)\(str)")
+                    }
+                }else{
+                    result.append("\(char)")
+                }
+            }
+        }
+        
+        return result
     }
     
     public func printTrie(indentation: Int)->String{
