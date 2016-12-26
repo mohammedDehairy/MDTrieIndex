@@ -21,6 +21,15 @@ class MDTrieIndex: NSObject {
     }
     
     /**
+        Train the trie with a list of strings (index them), after clearing all strings in the trei.
+        - parameter trainList : Array ot strings to be indexed.
+     */
+    public func retrain(trainList : [String]){
+        trie = [:]
+        train(trainList: trainList)
+    }
+    
+    /**
         Train the trie with a list of strings (index them), multiple calls to train() with the same list will consum processing power but the trie will end up being the same, multiple calls to train() with different lists of strings will result in the new strings being indexed and added to the trie and old strings will be preserved.
         - parameter trainList : Array ot strings to be indexed.
     */
